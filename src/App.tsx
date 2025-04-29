@@ -1,9 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 	const [time, setTime] = useState(0);
+	const [personalBest, setPersonalBest] = useState(0);
+
+	const stopTimer = useCallback(() => {
+		setIsTimerRunning(false);
+		setPersonalBest(Math.max(personalBest, time));
+	}, [time, personalBest]);
+
+	const startTimer = useCallback(() => {
+		setIsTimerRunning(true);
+	}, []);
 
 	useEffect(
 		() => {
@@ -49,7 +59,12 @@ function App() {
 			<h1 className="timer">{getTimeString(time)}</h1>
 			<button
 				className="start-stop-button"
-				onClick={() => setIsTimerRunning(!isTimerRunning)}
+				onClick={() => {
+					if (isTimerRunning)
+						stopTimer();
+					else
+						startTimer();
+				}}
 			>
 				{isTimerRunning ? "Stop" : "Start"}
 			</button>
@@ -57,11 +72,14 @@ function App() {
 				className="reset-button"
 				onClick={() => {
 					setTime(0);
-					setIsTimerRunning(false);
+					stopTimer();
 				}}
 			>
 				Reset
 			</button>
+			<p className="personal-best">
+				<strong>Personal Best</strong>: {getTimeString(personalBest)}
+			</p>
     </>
   )
 }
