@@ -6,25 +6,35 @@ function App() {
 	const [time, setTime] = useState(0);
 	const [personalBest, setPersonalBest] = useState(0);
 
+	const updatePersonalBest = useCallback((time: number) => {
+		setPersonalBest(personalBest => Math.max(personalBest, time));
+	}, []);
+
 	const stopTimer = useCallback(() => {
 		setIsTimerRunning(false);
-		setPersonalBest(Math.max(personalBest, time));
-	}, [time, personalBest]);
+		updatePersonalBest(time);
+	}, [updatePersonalBest, time]);
 
 	const startTimer = useCallback(() => {
 		setIsTimerRunning(true);
 	}, []);
 
+	const incrementTime = useCallback(() => {
+		const newTime = time + 1;
+		setTime(newTime);
+		updatePersonalBest(newTime);
+	}, [updatePersonalBest, time]);
+
 	useEffect(
 		() => {
 			const interval = setInterval(() => {
 				if (isTimerRunning)
-					setTime((time) => time + 1);
+					incrementTime();
 			}, 1000);
 
 			return () => clearInterval(interval);
 		},
-		[isTimerRunning]
+		[isTimerRunning, incrementTime]
 	)
 
 	const getTimeString = function (time: number) {
