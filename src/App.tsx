@@ -80,6 +80,13 @@ function App() {
 			<p className="personal-best">
 				<strong>Personal Best</strong>: {getTimeString(personalBest)}
 			</p>
+			<button
+				className="small-button reset-personal-best"
+				onClick={() => setPersonalBest(0)}
+				title="Reset personal best"
+			>
+				Reset PB
+			</button>
     </>
   )
 }

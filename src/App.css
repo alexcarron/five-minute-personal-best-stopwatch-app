@@ -40,3 +40,12 @@
 .read-the-docs {
   color: #888;
 }
+
+.small-button {
+	padding: 7px 16px;
+	font-size: 14px;
+	border-radius: 12px;
+
+	font-weight: 100;
+	font-style: italic;
+}
